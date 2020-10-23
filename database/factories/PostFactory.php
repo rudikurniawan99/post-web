@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Post;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PostFactory extends Factory
@@ -21,8 +22,13 @@ class PostFactory extends Factory
      */
     public function definition()
     {
+
         return [
-            //
+            'title' => $this->faker->sentence(2),
+            'slug' => Str::slug($this->faker->sentence(2)),
+            'body' => $this->faker->paragraph(5),
+            'image' => $this->faker->imageUrl()
+            // 'image' => $this->faker->image
         ];
     }
 }
