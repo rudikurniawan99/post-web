@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Yajra\DataTables\DataTables;
 
 class PostController extends Controller
 {
@@ -16,6 +19,14 @@ class PostController extends Controller
     {
         $posts = Post::latest()->get();
         return view('pages.dashboard.post.index', compact('posts'));
+
+        // DataTables Failed
+        // if($request->ajax()){
+        //     return DataTables::of($posts)
+        //         ->addIndexColumn()
+        //         ->make(true);
+        // }
+        // return view('pages.dashboard.post.index');
     }
 
     /**
@@ -25,7 +36,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.dashboard.post.create');
     }
 
     /**
@@ -36,7 +47,14 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $image = $request->file('image')->store('public');
+        Post::create([
+            'title' => $request->title,
+            'body' => $request->body,
+            'image' => $image,
+            'slug' => Str::slug($request->title),
+       ]);
+       return redirect()->route('post.index');
     }
 
     /**
@@ -45,9 +63,11 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        //
+        $posts = Post::where('slug', $slug)->get();
+        
+        return view('pages.dashboard.post.show', compact('posts'));
     }
 
     /**
@@ -58,7 +78,9 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        //
+        $post = Post::findOrFail($id);
+        
+        return view('pages.dashboard.post.create', compact('post'));
     }
 
     /**
@@ -70,7 +92,8 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $post = Post::find($id);
+        $image = $request->file('image')->store('public');
     }
 
     /**
