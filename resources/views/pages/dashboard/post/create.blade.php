@@ -1,4 +1,4 @@
-@extends('layouts.dashboard')
+@extends('layouts.dashboard', ['title' => 'Create Post'])
 
 @section('content')
   <div class="card py-4">
@@ -9,10 +9,20 @@
           <div class="form-group">
             <label for="title">Title</label>
             <input type="text" name="title" id="title" class="form-control">
+            @error('title')
+              <div class="text-danger mt-1">
+                <p class="font-weight-light">{{ $message }}</p>
+              </div>
+            @enderror
           </div>
           <div class="form-group">
             <label for="body">Body</label>
             <textarea name="body" id="body" class="form-control w-100"></textarea>
+            @error('body')
+              <div class="text-danger mt-1">
+                <p>{{ $message }}</p> 
+              </div>
+            @enderror
           </div>
           <div class="form-group">
             <label for="image"></label>

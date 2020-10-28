@@ -45,30 +45,50 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store()
     {
         
-        if(!$request->file('image')){
+        // if(!$request->file('image')){
 
-            $this->validate($request, [
-                'image' => 'nullable'
-            ]);
-            Post::create([
-                'title' => $request->title,
-                'body' => $request->body,
-                'slug' => Str::slug($request->title),
-        ]);
-        }else{
-            $image = $request->file('image')->store('public');
-            Post::create([
-                'title' => $request->title,
-                'body' => $request->body,
-                'image' => $image,
-                'slug' => Str::slug($request->title)
-            ]);
+        //     $this->validate($request, [
+        //         'title' => 'required',
+        //         'body' => 'required',
+        //         'image' => 'nullable'
+        //     ]);
+
+        //     Post::create([
+        //         'title' => $request->title,
+        //         'body' => $request->body,
+        //         'slug' => Str::slug($request->title),
+        // ]);
+        // }else{
+        //     $image = $request->file('image')->store('public');
+        //     Post::create([
+        //         'title' => $request->title,
+        //         'body' => $request->body,
+        //         'image' => $image,
+        //         'slug' => Str::slug($request->title)
+        //     ]);
+        // }
+        $image= request('image');
+        if($image){
+            $image = request()->file('image')->store('public');
         }
+
+        // validation
+        $post = request()->validate([
+            'title' => 'required|max:255',
+            'body' => 'required',
+            'image' => 'nullable'
+        ]);
+        $post['slug'] = Str::slug(request('title'));
+        $post['image'] = $image;
+
+        //create
+        Post::create($post);
+
         
-       return redirect()->route('post.index');
+        return redirect()->route('post.index');
     }
 
     /**
