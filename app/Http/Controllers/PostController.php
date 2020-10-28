@@ -47,13 +47,27 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $image = $request->file('image')->store('public');
-        Post::create([
-            'title' => $request->title,
-            'body' => $request->body,
-            'image' => $image,
-            'slug' => Str::slug($request->title),
-       ]);
+        
+        if(!$request->file('image')){
+
+            $this->validate($request, [
+                'image' => 'nullable'
+            ]);
+            Post::create([
+                'title' => $request->title,
+                'body' => $request->body,
+                'slug' => Str::slug($request->title),
+        ]);
+        }else{
+            $image = $request->file('image')->store('public');
+            Post::create([
+                'title' => $request->title,
+                'body' => $request->body,
+                'image' => $image,
+                'slug' => Str::slug($request->title)
+            ]);
+        }
+        
        return redirect()->route('post.index');
     }
 
@@ -63,11 +77,12 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($slug)
+    public function show($id)
     {
-        $posts = Post::where('slug', $slug)->get();
+        // $posts = Post::where('slug', $slug)->get();
+        $post = Post::findOrFail($id);
         
-        return view('pages.dashboard.post.show', compact('posts'));
+        return view('pages.dashboard.post.show', compact('post'));
     }
 
     /**
