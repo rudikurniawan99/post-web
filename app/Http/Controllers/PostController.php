@@ -87,6 +87,7 @@ class PostController extends Controller
 
         //create
         Post::create($post);
+        session()->flash('success-add', 'Data berhasil ditambahkan');
 
         
         return redirect()->route('post.index');
@@ -184,7 +185,7 @@ class PostController extends Controller
          * Use (PostRequest $request, Post $post)
          */
         $atr = $request->all();
-        if($atr['image']){
+        if($request->file('image')){
             if($post->image){
                 Storage::delete($post->image);
             }
@@ -192,6 +193,7 @@ class PostController extends Controller
         }
 
         $post->update($atr);
+        session()->flash('success-edit', 'Data berhasil diubah');
         
         return redirect()->route('post.index');
 

@@ -2,6 +2,21 @@
 
 @section('content')
   <div class="card my-4 p-3 ">
+    @if (session()->has('success-add'))
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session()->get('success-add') }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div> 
+    @elseif(session()->has('success-edit'))
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session()->get('success-edit') }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div> 
+    @endif
     <div class="card-title">
       <div class="d-flex justify-content-between">
         <h4>Posts</h4>
