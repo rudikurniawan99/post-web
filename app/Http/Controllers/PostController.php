@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PostRequest;
 use App\Models\Post;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -115,7 +116,7 @@ class PostController extends Controller
     {
         $post = Post::findOrFail($id);
         
-        return view('pages.dashboard.post.create', compact('post'));
+        return view('pages.dashboard.post.edit', compact('post'));
     }
 
     /**
@@ -125,10 +126,75 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Post $post, PostRequest $request)
     {
-        $post = Post::find($id);
-        $image = $request->file('image')->store('public');
+
+        /**
+         * Use (Request $request, and $id) as parameters
+         *  using commont method
+         */
+
+        // $newPost = $request->validate([
+        //     'title' => 'required',
+        //     'body' => 'required',
+        //     'image' => 'nullable'
+        // ]);
+
+        // $post = Post::find($id);
+        
+        // if($request->file('image')){
+        //     if($post->image){
+        //         Storage::delete($post->image);
+        //     }
+        //     $newPost['image'] = $request->file('image')->store('public');
+        // }        
+        // // $post->update([
+        // //     'title' => $request->title,
+        // //     'body' => $request->body,
+        // //     'image' => $image
+        // // ]);
+
+        // $post->update($newPost);
+
+        // return redirect()->route('post.index');
+
+
+        /**
+         * Use (Post $post) as a parameter
+         */
+
+        // $input = request()->validate([
+        //     'title' => 'required',
+        //     'body' => 'required',
+        //     'image' => 'nullable'
+        // ]);
+        
+        // if(request()->file('image')){
+        //     if($post->image){
+        //         Storage::delete($post->image);
+        //     }
+        //     $input['image'] = request()->file('image')->store('public');
+        // }
+
+        // $post->update($input);
+        // return redirect()->route('post.index');
+
+
+        /**
+         * Use (PostRequest $request, Post $post)
+         */
+        $atr = $request->all();
+        if($atr['image']){
+            if($post->image){
+                Storage::delete($post->image);
+            }
+            $atr['image'] = $request->file('image')->store('public');
+        }
+
+        $post->update($atr);
+        
+        return redirect()->route('post.index');
+
     }
 
     /**
@@ -137,8 +203,14 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        //
+        if($post->image){
+            Storage::delete($post->image);
+        }
+        $post->delete();
+
+        return redirect()->route('post.index');
     }
+
 }
