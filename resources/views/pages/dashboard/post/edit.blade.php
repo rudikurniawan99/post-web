@@ -15,6 +15,15 @@
             @enderror
           </div>
           <div class="form-group">
+            <label for="category_id">Category</label>
+            <select class="form-control" name="category_id">
+              <option disabled>Select Category</option>
+              @foreach ($categories as $ctg)
+                <option {{ $ctg->id == $post->category_id ? 'selected' : '' }} value="{{ $ctg->id }}">{{ Str::title($ctg->name) }}</option> 
+              @endforeach
+            </select>
+          </div>
+          <div class="form-group">
             <label for="body">Body</label>
             <textarea name="body" id="body" class="form-control w-100">{{ old('body') ?? $post->body }}</textarea>
             @error('body')

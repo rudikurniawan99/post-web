@@ -19,38 +19,36 @@
     @endif
     <div class="card-title">
       <div class="d-flex justify-content-between">
-        <h4>Posts</h4>
-        <a href="{{ route('post.create') }}" class="btn btn-primary btn-sm">
+        <h4>Category</h4>
+        <a href="{{ route('category.create') }}" class="btn btn-primary btn-sm">
           <i class="fas fa-plus mr-2"></i>
-          Tambahkan Post
+          Tambahkan Kategori
         </a>
       </div>
     </div>
     <div class="card-body px-0">
-      <table class="table table-striped" id="yajra-table">
+      <table class="table table-striped text-center" id="yajra-table">
         <thead>
           <tr>
             <th>No</th>
-            <th>Title</th>
-            <th>Category</th>
+            <th>Name</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
-          @foreach ($posts as $post)
+          @foreach ($categories as $category)
             <tr>
               <td>{{ $loop->index+1 }}</td>
-              <td>{{ Str::title($post->title) }}</td>
-              <td>{{ $post->category->name }}</td>
+              <td>{{ Str::title($category->name) }}</td>
               <td>
-                <div class="d-flex">
-                  <a href="{{ route('post.show', $post->id) }}" class="btn btn-sm btn-success mr-2">
+                <div class="d-flex justify-content-center">
+                  <a href="{{ route('category.show', $category->id) }}" class="btn btn-sm btn-success mr-2">
                     <i class="fas fa-book"></i>
                   </a>
-                  <a href="{{ route('post.edit',$post->id) }}" class="btn btn-info btn-sm mr-2">
+                  <a href="{{ route('category.edit',$category->id) }}" class="btn btn-info btn-sm mr-2">
                     <i class="fas fa-pen"></i>
                   </a>
-                  <form action="{{ route('post.destroy',$post->id) }}" method="post">
+                  <form action="{{ route('category.destroy',$category->id) }}" method="post">
                     @method('delete')
                     @csrf
                     <button class="btn btn-danger btn-sm">

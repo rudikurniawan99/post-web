@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PostRequest;
+use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -37,7 +38,10 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('pages.dashboard.post.create');
+        $categories = Category::all();
+        return view('pages.dashboard.post.create',
+            compact('categories')
+        );
     }
 
     /**
@@ -80,6 +84,7 @@ class PostController extends Controller
         $post = request()->validate([
             'title' => 'required|max:255',
             'body' => 'required',
+            'category_id' => 'required',
             'image' => 'nullable'
         ]);
         $post['slug'] = Str::slug(request('title'));
@@ -116,8 +121,12 @@ class PostController extends Controller
     public function edit($id)
     {
         $post = Post::findOrFail($id);
+        $categories = Category::all();
         
-        return view('pages.dashboard.post.edit', compact('post'));
+        return view('pages.dashboard.post.edit', compact(
+            'post',
+            'categories'
+        ));
     }
 
     /**
@@ -184,6 +193,8 @@ class PostController extends Controller
         /**
          * Use (PostRequest $request, Post $post)
          */
+
+
         $atr = $request->all();
         if($request->file('image')){
             if($post->image){

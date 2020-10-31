@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Home\PostController as HomePostController;
 use App\Http\Controllers\PostController;
@@ -22,7 +23,10 @@ Route::get('/', function () {
 
 Route::prefix('admin')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-    Route::resource('post', PostController::class);
+    Route::resources([
+        'post' => PostController::class,
+        'category' => CategoryController::class
+    ]);
 });
 
 Route::prefix('post')->group(function() {
