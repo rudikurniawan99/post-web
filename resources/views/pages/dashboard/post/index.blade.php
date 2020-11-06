@@ -44,7 +44,7 @@
               <td>{{ $post->category->name }}</td>
               <td>
                 <div class="d-flex">
-                  <a href="{{ route('post.show', $post->id) }}" class="btn btn-sm btn-success mr-2">
+                  <a href="{{ route('post.show',[$post->category->slug, $post->slug]  ) }}" class="btn btn-sm btn-success mr-2">
                     <i class="fas fa-book"></i>
                   </a>
                   <a href="{{ route('post.edit',$post->id) }}" class="btn btn-info btn-sm mr-2">

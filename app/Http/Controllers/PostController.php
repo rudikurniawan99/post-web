@@ -104,12 +104,13 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($category, $slug)
     {
-        // $posts = Post::where('slug', $slug)->get();
-        $post = Post::findOrFail($id);
+        $posts = Post::where('slug', $slug)->get();
+        // $category = $posts->posts->name;
+        // $post = Post::findOrFail($slug);
         
-        return view('pages.dashboard.post.show', compact('post'));
+        return view('pages.dashboard.post.show', compact('posts'));
     }
 
     /**

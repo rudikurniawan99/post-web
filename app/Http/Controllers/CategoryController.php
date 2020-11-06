@@ -64,9 +64,15 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Category $category)
     {
-        //
+        $posts = $category->posts;
+        
+        return view('pages.home.post.show', compact(
+            'posts',
+            'category'
+        ));
+
     }
 
     /**

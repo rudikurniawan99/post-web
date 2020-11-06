@@ -10903,3 +10903,8 @@ a.text-dark:focus {
   }
 }
 
+#landing header {
+  background-color: #3f3232;
+  height: 80% !important;
+}
+
